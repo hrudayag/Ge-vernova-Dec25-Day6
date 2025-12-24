@@ -8,7 +8,7 @@ class EmpWageBuilder implements IEmpWageBuilder {
     // UC-2, UC-3 assumptions
     public static final int FULL_DAY_HOUR = 8;
     public static final int PART_TIME_HOUR = 8;
-    // UC-12: list of companies
+    // UC-12
     private ArrayList<CompanyEmpWage> companies;
     EmpWageBuilder() {
         companies = new ArrayList<>();
@@ -35,7 +35,6 @@ class EmpWageBuilder implements IEmpWageBuilder {
         company.totalMonthlyWage = 0;
         company.dailyWages.clear();
         Random random = new Random();
-
         while (totalWorkingDays < company.maxWorkingDays &&
                 totalWorkingHours < company.maxWorkingHours) {
 
@@ -60,13 +59,24 @@ class EmpWageBuilder implements IEmpWageBuilder {
             }
 
             totalWorkingHours += workingHours;
+
             int dailyWage = workingHours * company.wagePerHour;
-            // UC-13
             company.dailyWages.add(dailyWage);
             company.totalMonthlyWage += dailyWage;
         }
+
         System.out.println(company.companyName +
                 " Total Wage: " + company.totalMonthlyWage);
         System.out.println("Daily Wages: " + company.dailyWages);
+    }
+    //UC-14
+    @Override
+    public int getTotalWage(String companyName) {
+        for (CompanyEmpWage company : companies) {
+            if (company.companyName.equals(companyName)) {
+                return company.totalMonthlyWage;
+            }
+        }
+        return 0;
     }
 }

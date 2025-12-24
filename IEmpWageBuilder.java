@@ -3,4 +3,6 @@ interface IEmpWageBuilder {
                     int maxWorkingDays, int maxWorkingHours);
 
     void computeEmployeeWages();
+    // UC-14
+    int getTotalWage(String companyName);
 }

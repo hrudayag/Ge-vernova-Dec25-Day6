@@ -5,7 +5,7 @@ class CompanyEmpWage {
     int maxWorkingDays;
     int maxWorkingHours;
     int totalMonthlyWage;
-    // UC-13: store daily wages
+    // UC-13
     ArrayList<Integer> dailyWages;
     CompanyEmpWage(String companyName, int wagePerHour,
                    int maxWorkingDays, int maxWorkingHours) {
