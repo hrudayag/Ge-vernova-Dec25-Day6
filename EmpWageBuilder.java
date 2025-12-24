@@ -7,32 +7,46 @@ class EmpWageBuilder {
     // UC-2, UC-3 assumptions
     public static final int FULL_DAY_HOUR = 8;
     public static final int PART_TIME_HOUR = 8;
-    // UC-9 instance variables
-    private String companyName;
-    private int wagePerHour;
-    private int maxWorkingDays;
-    private int maxWorkingHours;
-    private int totalMonthlyWage;
-    // Constructor (UC-8, UC-9)
-    EmpWageBuilder(String companyName, int wagePerHour,
-                   int maxWorkingDays, int maxWorkingHours) {
-        this.companyName = companyName;
-        this.wagePerHour = wagePerHour;
-        this.maxWorkingDays = maxWorkingDays;
-        this.maxWorkingHours = maxWorkingHours;
+
+    // UC-10: array of companies
+    private CompanyEmpWage[] companies;
+    private int companyCount = 0;
+
+    // UC-10 constructor
+    EmpWageBuilder(int totalCompanies) {
+        companies = new CompanyEmpWage[totalCompanies];
     }
-    public void computeEmployeeWage() {
+
+    // UC-10: add company
+    public void addCompany(String companyName, int wagePerHour,
+                           int maxWorkingDays, int maxWorkingHours) {
+
+        companies[companyCount++] =
+                new CompanyEmpWage(companyName, wagePerHour,
+                        maxWorkingDays, maxWorkingHours);
+    }
+
+    // UC-10: compute wages for all companies
+    public void computeEmployeeWages() {
+        for (int i = 0; i < companyCount; i++) {
+            computeCompanyWage(companies[i]);
+        }
+    }
+    private void computeCompanyWage(CompanyEmpWage company) {
+
         int totalWorkingDays = 0;
         int totalWorkingHours = 0;
-        totalMonthlyWage = 0;
+        company.totalMonthlyWage = 0;
+
         Random random = new Random();
-        while (totalWorkingDays < maxWorkingDays &&
-                totalWorkingHours < maxWorkingHours) {
+
+        while (totalWorkingDays < company.maxWorkingDays &&
+                totalWorkingHours < company.maxWorkingHours) {
+
             totalWorkingDays++;
-            // UC-1: Attendance check
             int empType = random.nextInt(3);
             int workingHours = 0;
-            // UC-4: Switch case
+
             switch (empType) {
                 case IS_FULL_TIME:
                     workingHours = FULL_DAY_HOUR;
@@ -43,21 +57,17 @@ class EmpWageBuilder {
                 default:
                     workingHours = 0;
             }
-            // UC-6: Max hours check
-            if (totalWorkingHours + workingHours > maxWorkingHours) {
-                workingHours = maxWorkingHours - totalWorkingHours;
+
+            if (totalWorkingHours + workingHours > company.maxWorkingHours) {
+                workingHours = company.maxWorkingHours - totalWorkingHours;
             }
+
             totalWorkingHours += workingHours;
-            // UC-2: Daily wage
-            int dailyWage = workingHours * wagePerHour;
-            totalMonthlyWage += dailyWage;
+            company.totalMonthlyWage += workingHours * company.wagePerHour;
         }
-    }
-    // UC-9: getters
-    public int getTotalMonthlyWage() {
-        return totalMonthlyWage;
-    }
-    public String getCompanyName() {
-        return companyName;
+
+        // UC-9 output retained
+        System.out.println(company.companyName +
+                " Total Wage: " + company.totalMonthlyWage);
     }
 }
