@@ -1,9 +1,10 @@
 import java.util.Random;
-class EmpWageBuilder {
+class EmpWageBuilder implements IEmpWageBuilder {
     // UC-1, UC-3 constants
     public static final int IS_ABSENT = 0;
     public static final int IS_FULL_TIME = 1;
     public static final int IS_PART_TIME = 2;
+
     // UC-2, UC-3 assumptions
     public static final int FULL_DAY_HOUR = 8;
     public static final int PART_TIME_HOUR = 8;
@@ -17,7 +18,8 @@ class EmpWageBuilder {
         companies = new CompanyEmpWage[totalCompanies];
     }
 
-    // UC-10: add company
+    // UC-11: interface method implementation
+    @Override
     public void addCompany(String companyName, int wagePerHour,
                            int maxWorkingDays, int maxWorkingHours) {
 
@@ -26,7 +28,8 @@ class EmpWageBuilder {
                         maxWorkingDays, maxWorkingHours);
     }
 
-    // UC-10: compute wages for all companies
+    // UC-11: interface method implementation
+    @Override
     public void computeEmployeeWages() {
         for (int i = 0; i < companyCount; i++) {
             computeCompanyWage(companies[i]);
@@ -44,6 +47,7 @@ class EmpWageBuilder {
                 totalWorkingHours < company.maxWorkingHours) {
 
             totalWorkingDays++;
+
             int empType = random.nextInt(3);
             int workingHours = 0;
 
@@ -66,7 +70,6 @@ class EmpWageBuilder {
             company.totalMonthlyWage += workingHours * company.wagePerHour;
         }
 
-        // UC-9 output retained
         System.out.println(company.companyName +
                 " Total Wage: " + company.totalMonthlyWage);
     }
