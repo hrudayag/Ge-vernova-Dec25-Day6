@@ -1,42 +1,36 @@
+import java.util.ArrayList;
 import java.util.Random;
 class EmpWageBuilder implements IEmpWageBuilder {
     // UC-1, UC-3 constants
     public static final int IS_ABSENT = 0;
     public static final int IS_FULL_TIME = 1;
     public static final int IS_PART_TIME = 2;
-
     // UC-2, UC-3 assumptions
     public static final int FULL_DAY_HOUR = 8;
     public static final int PART_TIME_HOUR = 8;
-
-    // UC-10: array of companies
-    private CompanyEmpWage[] companies;
-    private int companyCount = 0;
-
-    // UC-10 constructor
-    EmpWageBuilder(int totalCompanies) {
-        companies = new CompanyEmpWage[totalCompanies];
+    // UC-12: ArrayList instead of array
+    private ArrayList<CompanyEmpWage> companies;
+    // UC-12 constructor
+    EmpWageBuilder() {
+        companies = new ArrayList<>();
     }
-
-    // UC-11: interface method implementation
+    // UC-11: interface method
     @Override
     public void addCompany(String companyName, int wagePerHour,
                            int maxWorkingDays, int maxWorkingHours) {
 
-        companies[companyCount++] =
-                new CompanyEmpWage(companyName, wagePerHour,
-                        maxWorkingDays, maxWorkingHours);
+        companies.add(new CompanyEmpWage(
+                companyName, wagePerHour,
+                maxWorkingDays, maxWorkingHours));
     }
-
-    // UC-11: interface method implementation
     @Override
     public void computeEmployeeWages() {
-        for (int i = 0; i < companyCount; i++) {
-            computeCompanyWage(companies[i]);
+
+        for (CompanyEmpWage company : companies) {
+            computeCompanyWage(company);
         }
     }
     private void computeCompanyWage(CompanyEmpWage company) {
-
         int totalWorkingDays = 0;
         int totalWorkingHours = 0;
         company.totalMonthlyWage = 0;
@@ -69,7 +63,6 @@ class EmpWageBuilder implements IEmpWageBuilder {
             totalWorkingHours += workingHours;
             company.totalMonthlyWage += workingHours * company.wagePerHour;
         }
-
         System.out.println(company.companyName +
                 " Total Wage: " + company.totalMonthlyWage);
     }
